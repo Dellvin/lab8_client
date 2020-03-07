@@ -18,12 +18,11 @@ using boost::posix_time::ptime;
 
 void connection(const boost::system::error_code &ec);
 
-void pinging(boost::asio::ip::tcp::socket *sock,
-        boost::asio::ip::tcp::endpoint *ep) {
+void pinging(boost::asio::ip::tcp::socket *sock) {
     while (true) {
         sleep(std::rand() % 8);
         try {
-            sock->write_some(buffer("ping\n"));
+            sock->write_some(boost::asio::buffer("ping\n"));
         } catch (...) {
             return;
         }
@@ -33,24 +32,23 @@ void pinging(boost::asio::ip::tcp::socket *sock,
 
 int main() {
     boost::asio::io_service service;
-    boost::asio::ip::tcp::endpoint ep(ip::address::
+    boost::asio::ip::tcp::endpoint ep(boost::asio::ip::address::
     from_string("127.0.0.1"), 1024);
     boost::asio::ip::tcp::socket sock(service);
     sock.connect(ep);
-    sock.write_some(buffer("Alice\n"));
+    sock.write_some(boost::asio::buffer("Alice\n"));
     char c[32];
-    sock.read_some(buffer(c));
+    sock.read_some(boost::asio::buffer(c));
     std::cout << c;
-    std::thread pingThread(pinging, &sock, &ep);
+    std::thread pingThread(pinging, &sock);
     while (true) {
-        char c[32];
         memset(c, '\0', 32);
         std::string s;
         std::cout << "entering: ";
         std::cin >> s;
         s.push_back('\n');
-        sock.write_some(buffer(s.c_str()));
-        sock.read_some(buffer(s.c_str()));
+        sock.write_some(boost::asio::buffer(s));
+        sock.read_some(boost::asio::buffer(s));
         if (s == "bye\n") {
             sock.close();
             std::cout << "GOOD BYE!" << std::endl;
