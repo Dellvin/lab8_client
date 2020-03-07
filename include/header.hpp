@@ -10,16 +10,16 @@
 #include <chrono>
 #include <thread>
 #include <unistd.h>
+#include <string>
 
 #define BOOST_ASIO_SEPARATE_COMPILATION
 
-using namespace boost::asio;
+using boost::posix_time::ptime;
 
 void connection(const boost::system::error_code &ec);
 
 void pinging(boost::asio::ip::tcp::socket *sock, boost::asio::ip::tcp::endpoint *ep) {
-
-    while (true) {
+    while(true){
         sleep(std::rand() % 8);
         try {
             sock->write_some(buffer("ping\n"));
@@ -31,9 +31,9 @@ void pinging(boost::asio::ip::tcp::socket *sock, boost::asio::ip::tcp::endpoint 
 
 
 int main() {
-    io_service service;
-    ip::tcp::endpoint ep(ip::address::from_string("127.0.0.1"), 1024);
-    ip::tcp::socket sock(service);
+    boost::asio::io_service service;
+    boost::asio::ip::tcp::endpoint ep(ip::address::from_string("127.0.0.1"), 1024);
+    boost::asio::ip::tcp::socket sock(service);
     sock.connect(ep);
     sock.write_some(buffer("Alice\n"));
     char c[32];
@@ -41,16 +41,14 @@ int main() {
     std::cout << c;
     std::thread pingThread(pinging, &sock, &ep);
     while (true) {
-
         char c[32];
         memset(c, '\0', 32);
         std::string s;
         std::cout << "entering: ";
-        std::cin >> c;
-        strcat(c, "\n");
-        sock.write_some(buffer(c));
-        sock.read_some(buffer(c));
-        s = c;
+        std::cin >> s;
+        s.push_back('\n');
+        sock.write_some(buffer(s.c_str()));
+        sock.read_some(buffer(s.c_str()));
         if (s == "bye\n") {
             sock.close();
             std::cout << "GOOD BYE!" << std::endl;
