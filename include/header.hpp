@@ -18,8 +18,9 @@ using boost::posix_time::ptime;
 
 void connection(const boost::system::error_code &ec);
 
-void pinging(boost::asio::ip::tcp::socket *sock, boost::asio::ip::tcp::endpoint *ep) {
-    while(true){
+void pinging(boost::asio::ip::tcp::socket *sock,
+        boost::asio::ip::tcp::endpoint *ep) {
+    while (true) {
         sleep(std::rand() % 8);
         try {
             sock->write_some(buffer("ping\n"));
@@ -32,7 +33,8 @@ void pinging(boost::asio::ip::tcp::socket *sock, boost::asio::ip::tcp::endpoint 
 
 int main() {
     boost::asio::io_service service;
-    boost::asio::ip::tcp::endpoint ep(ip::address::from_string("127.0.0.1"), 1024);
+    boost::asio::ip::tcp::endpoint ep(ip::address::
+    from_string("127.0.0.1"), 1024);
     boost::asio::ip::tcp::socket sock(service);
     sock.connect(ep);
     sock.write_some(buffer("Alice\n"));
