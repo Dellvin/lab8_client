@@ -10,6 +10,7 @@
 #include <chrono>
 #include <thread>
 #include <unistd.h>
+#include <string>
 
 #define BOOST_ASIO_SEPARATE_COMPILATION
 
@@ -20,8 +21,6 @@ public:
                   from_string("127.0.0.1"), 1024), sock(service) {
         sock.connect(ep);
         getLogin();
-
-
         mainLoop();
     }
 
@@ -44,8 +43,7 @@ private:
         }
     }
 
-    static void pinging(boost::asio::ip::tcp::socket *sock,
-                        boost::asio::ip::tcp::endpoint *ep) {
+    static void pinging(boost::asio::ip::tcp::socket *sock) {
         const std::string PING = "ping\n";
         while (true) {
             sleep(std::rand() % 8);
