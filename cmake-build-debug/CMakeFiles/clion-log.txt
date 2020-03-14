@@ -1,4 +1,4 @@
-/Applications/CLion.app/Contents/bin/cmake/mac/bin/cmake -DCMAKE_BUILD_TYPE=Debug -G "CodeBlocks - Unix Makefiles" /Users/dellvin/Desktop/lab8ForGit/lab-08-asio-client
+/Applications/CLion.app/Contents/bin/cmake/mac/bin/cmake -DCMAKE_BUILD_TYPE=Debug -G "CodeBlocks - Unix Makefiles" /Users/dellvin/Desktop/Учеба/C++/lab8ForGit/lab-08-asio-client
 CMake Error at CMakeLists.txt:14 (include):
   include could not find load file:
 
