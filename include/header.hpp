@@ -26,7 +26,7 @@ public:
 
 private:
     void mainLoop() {
-        std::thread pingThread(pinging, &sock, &ep);
+        std::thread pingThread(pinging, &sock);
         while (true) {
             std::string s;
             std::cout << "entering: ";
